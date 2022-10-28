@@ -51,5 +51,5 @@ app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
 app.use(auth_1.default);
 app.use(home_1.default);
 mongoose_1.default.connect(URI, () => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
 });

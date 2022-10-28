@@ -75,5 +75,5 @@ app.use(homeRoute)
 
 
 mongoose.connect(URI,()=>{
-    app.listen(3000)
+    app.listen(process.env.PORT || 3000)
 })
