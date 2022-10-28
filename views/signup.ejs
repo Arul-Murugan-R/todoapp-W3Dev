@@ -1,0 +1,30 @@
+<%- include('./layout/header.ejs')  %> 
+<link href="/css/home.css" rel="stylesheet" >
+</head>
+<body>
+    <%- include('./layout/nav.ejs')  %> 
+    <div class="auth">
+        <form class="form" action="/signup" method="POST">
+            <% if(message){ %> 
+                <center><div class="alert" role="alert">
+                    <%= message %>
+                  </div></center>
+              <% } %> 
+            <div class="input-field">
+                <label><b>User name</b></label><br>
+                <input type="text" name="name"/>
+            </div>
+            <div class="input-field">
+                <label><b>Email Id </b></label><span><red>*</red></span><br>
+                <input type="text" name="email" required/>
+            </div>
+            <div class="input-field">
+                <label><b>Password </b></label><span><red>*</red></span><br>
+                <input type="password" name="password" required/>
+            </div>
+            <div class="input-field">
+                <center><input type="submit" value="Signup"/></center>
+            </div>
+        </form>
+    </div>
+<%- include('./layout/footer.ejs')  %> 
