@@ -1,0 +1,60 @@
+<%- include('./layout/header.ejs')  %> 
+<link href="/css/home.css" rel="stylesheet" >
+<link href="/css/todo.css" rel="stylesheet" >
+</head>
+<body>
+    <%- include('./layout/nav.ejs')  %> 
+    <!-- <a href="#" class="switches logout">Logout</a> -->
+    <div class="container">
+        <div class="options">
+            <a class="switches<% if(url==='/'){ %> focused<% } %>" href="/">Add New</a>
+            <a class="switches<% if(url==='/search'){ %> focused<% } %>" href="/search">Search</a>
+            <a class="switches<% if(url.includes('/filter')){ %> focused<% } %>" href="/filter/all">Filter</a>
+        </div>
+        <% if(url==='/'){ %> 
+        <form class="form" action="/add-todo" method="post">
+                <input type="text" class="input" name="title" />
+                <input type="submit" class="add" value="Add Todo" />
+        </form>
+        <% }else if(url==='/search'){ %> 
+        <form class="form" action="/search" method="post">
+            <input type="text" class="input" name="search" />
+            <input type="submit" class="add" value="Search Todo" />
+        </form>
+        <% if(url==='/search'){ %>
+            <% if(searched){ %> 
+            <center><h4>Searched :"<%= searched.title  %>" Found : <%= searched.count %> </h4></center> 
+        <% } %>
+        <% } %> 
+        <% } %> 
+        <div class="tasks">
+            <% if(url.includes('/filter')){ %>
+                <div class="filters">
+                    <a href="/filter/all" class="<% if(url==='/filter/all'){ %>active<% } %>">All</a>
+                    <a href="/filter/pending" class="<% if(url==='/filter/pending'){ %>active<% } %>">Pending</a>
+                    <a href="/filter/completed" class="<% if(url==='/filter/completed'){ %>active<% } %>">Completed</a>
+                  </div>
+                  <!-- <button class="clear-btn">Clear All</button> -->
+            <% } %>  
+             
+            <% if(todos.length == 0){ %> 
+            <div class="task">
+                <div>Currently no todos are found.</div>
+                <!-- <span><i class="far fa-trash-alt delete"></i></span> -->
+            </div>
+            <% }else{ %> 
+            <% for(let todo of todos){ %> 
+                <div class="task <% if(todo.status == 'done'){ %>done-task<% } %>">
+                    <% if(todo.status == 'done'){ %> 
+                        <span class="done">&#x2713;</span>
+                        <% } %> 
+                    <a href="<% if(todo.status == 'pending'){ %>/done/<%= todo._id  %><% }else if(todo.status=='done') {%>/pending/<%= todo._id  %><% } %> " class="list-title"><%= todo.title  %> </a>
+                        <span><a href="/delete/<%= todo._id %>" class="far fa-trash-alt delete"></a></span>
+                </div>
+            <% } %> 
+            <% } %> 
+        </div>
+        <div class="delete-all">Delete all</div>
+        
+    </div>
+<%- include('./layout/footer.ejs')  %> 
