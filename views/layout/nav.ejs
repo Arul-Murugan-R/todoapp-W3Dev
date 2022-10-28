@@ -1,0 +1,11 @@
+<div class="nav-bar">
+    <h2><a href="/">ToDo Application</a></h2>
+    <div class="buttons">
+        <% if(!login){ %> 
+        <a class="<% if(url =='/login'){ %>focused<% } %>"  href="/login" type="button" >Login</a>
+        <a class="<% if(url =='/signup'){ %>focused<% } %>"  href="/signup" type="button" >Signup</a>
+        <% }else{ %> 
+            <a class="<% if(url =='/logout'){ %>focused<% } %>"  href="/logout" type="button" >Logout</a>
+        <% } %> 
+    </div>
+</div>
