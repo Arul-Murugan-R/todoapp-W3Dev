@@ -1,0 +1,95 @@
+:root {
+    --bg: #352f5b;
+    --fo :#f44336;
+    --white: #ffffff;
+}
+body{
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial;
+}
+.nav-bar{
+    background-color: var(--bg);
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
+
+}
+.nav-bar h2{
+    /* flex:1; */
+    letter-spacing: 2px;
+    padding-left: 10px;
+}
+
+.nav-bar h2 a{
+    text-decoration: none;
+    color: var(--white);
+}
+
+.nav-bar .buttons{
+    margin-top: 20px;
+
+}
+.nav-bar .buttons a{
+    font-size: 20px;
+    text-decoration: none;
+    color:var(--white);
+    /* border:1px solid var(--white); */
+    border-radius: 6px;
+    padding:4px 20px;
+}
+.nav-bar .buttons a:hover,.nav-bar .buttons a.focused{
+    /* border:0.7px solid var(--white); */
+    color:var(--fo);
+    /* font-weight: bold; */
+}
+.nav-bar .buttons a:not(:last-child){
+    margin-right: 5px;
+}
+
+.auth .form {
+    background-color: #eee;
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    width:600px;
+    padding-left: 30px;
+    margin: 20px auto;
+    margin-top: 30px;
+}
+
+.auth .form .input-field:not(:last-child){
+    margin-bottom: 20px;
+}
+
+.auth .form .input-field input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width:560px;
+    margin-top: 5px;
+}
+.auth .form .input-field input[type='submit']{
+    background-color: var(--bg);
+    color: var(--white);
+    /* font-weight: bold; */
+    width: 200px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.form .input-field input:focus{
+    outline: none;
+}
+
+.alert{
+    background-color: var(--white);
+    padding: 10px;
+    border-radius: 6px;
+    /* border: 1px solid var(--bg); */
+    color: var(--fo);
+    text-align: center;
+    margin :10px auto;
+    width: 200px auto;
+}
