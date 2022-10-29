@@ -1,8 +1,8 @@
 FROM node:16
 
-ADD . /todo
+ADD . /app
 
-WORKDIR /todo
+WORKDIR /app
 
 
 COPY package*.json ./
