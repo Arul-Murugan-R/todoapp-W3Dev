@@ -39,6 +39,7 @@ app.set('views', 'views');
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.locals.login = req.session.isLoggedIn;
+    res.locals.message = '';
     if (!req.session.user) {
         return next();
     }

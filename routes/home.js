@@ -22,7 +22,7 @@ route.post('/add-todo', auth_1.default, (req, res, next) => __awaiter(void 0, vo
         user.product.push({
             title: req.body.title,
             status: 'pending',
-            _id: undefined
+            _id: undefined,
         });
         const added = yield user.save();
         if (added) {
@@ -31,12 +31,21 @@ route.post('/add-todo', auth_1.default, (req, res, next) => __awaiter(void 0, vo
         }
     }
 }));
+route.use('/delete/all', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield users_1.default.findById(req.user._id);
+    if (user) {
+        yield user.$set({ product: [] });
+        yield user.save();
+        console.log('Pro deleted successfully');
+        res.redirect('/');
+    }
+}));
 route.use('/delete/:id', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield users_1.default.findById(req.user._id);
     if (user) {
         // let filteredIndex: number = await user.product.findIndex((todo)=>{return todo._id.toString()===req.params.id})
         let filteredItem = yield user.product.filter((todo) => { return todo._id.toString() !== req.params.id; });
-        console.log(user.product, user);
+        // console.log(user.product,user);
         yield user.$set({ product: filteredItem });
         yield user.save();
         console.log('Pro deleted successfully');
@@ -49,8 +58,9 @@ route.use('/done/:id', auth_1.default, (req, res, next) => __awaiter(void 0, voi
         const statusIndex = yield user.product.findIndex((todo) => { return todo._id.toString() === req.params.id; });
         req.user.product[statusIndex].status = 'done';
         yield user.$set({ product: req.user.product });
-        user.save();
+        yield user.save();
         console.log('Pro Updated Sucessfully');
+        // let message = {detail:'Updated Status',type:'Success'}
         res.redirect('/');
     }
 }));
@@ -64,6 +74,7 @@ route.use('/pending/:id', auth_1.default, (req, res, next) => __awaiter(void 0, 
         yield user.$set({ product: req.user.product });
         yield user.save();
         console.log('Pro Updated Sucessfully');
+        // let message = {detail:'Updated Status',type:'Success'}
         res.redirect('/');
     }
 }));
@@ -76,19 +87,26 @@ route.post('/search', auth_1.default, (req, res, next) => __awaiter(void 0, void
             todoList.push(todo);
         }
     }
+    let message = { detail: 'Seaching is done', type: 'Success' };
     let searched = { title: search, count: todoList.length };
-    res.render('home', { title: 'Home Page', url: req.originalUrl, todos: todoList, searched });
+    res.render('home', { title: 'Home Page',
+        url: req.originalUrl,
+        todos: todoList, searched,
+        message
+    });
 }));
 route.use('/search', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.render('home', { title: 'Home Page', url: req.originalUrl, todos: req.user.product, searched: null });
 }));
 route.use('/filter/pending', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let todoFiltered = yield req.user.product.filter((todo) => { return todo.status == 'pending'; });
-    res.render('home', { title: 'Home Page', url: req.originalUrl, todos: todoFiltered });
+    let message = { detail: 'Filtered Pending List', type: 'Success' };
+    res.render('home', { title: 'Home Page', url: req.originalUrl, todos: todoFiltered, message });
 }));
 route.use('/filter/completed', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let todoFiltered = yield req.user.product.filter((todo) => { return todo.status == 'done'; });
-    res.render('home', { title: 'Home Page', url: req.originalUrl, todos: todoFiltered });
+    let message = { detail: 'Filtered Completed List', type: 'Success' };
+    res.render('home', { title: 'Home Page', url: req.originalUrl, todos: todoFiltered, message });
 }));
 route.use('/filter/all', auth_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.render('home', { title: 'Home Page', url: req.originalUrl, todos: req.user.product });

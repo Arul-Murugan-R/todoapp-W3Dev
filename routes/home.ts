@@ -9,7 +9,7 @@ route.post('/add-todo',auth,async (req,res,next)=>{
         user.product.push({
             title: req.body.title,
              status: 'pending',
-            _id: undefined
+            _id: undefined,
         })
         const added = await user.save()
         if(added){
@@ -18,12 +18,21 @@ route.post('/add-todo',auth,async (req,res,next)=>{
         }
     }
 })
+route.use('/delete/all',auth,async (req,res,next)=>{
+    const user = await users.findById(req.user._id)
+    if(user){
+        await user.$set({product:[]})
+        await user.save()
+        console.log('Pro deleted successfully');
+        res.redirect('/')
+    }
+})
 route.use('/delete/:id',auth,async (req,res,next)=>{
     const user = await users.findById(req.user._id)
     if(user){
         // let filteredIndex: number = await user.product.findIndex((todo)=>{return todo._id.toString()===req.params.id})
         let filteredItem = await user.product.filter((todo)=>{return todo._id.toString()!==req.params.id})
-        console.log(user.product,user);
+        // console.log(user.product,user);
         await user.$set({product:filteredItem})
         await user.save()
         console.log('Pro deleted successfully');
@@ -37,8 +46,9 @@ route.use('/done/:id',auth,async (req,res,next)=>{
         const statusIndex = await user.product.findIndex((todo)=>{return todo._id.toString() === req.params.id })
         req.user.product[statusIndex].status = 'done'
         await user.$set({product:req.user.product})
-        user.save()
+        await user.save()
         console.log('Pro Updated Sucessfully');
+        // let message = {detail:'Updated Status',type:'Success'}
         res.redirect('/')
     }
 })
@@ -52,6 +62,7 @@ route.use('/pending/:id',auth,async (req,res,next)=>{
         await user.$set({product:req.user.product})
         await user.save()
         console.log('Pro Updated Sucessfully');
+        // let message = {detail:'Updated Status',type:'Success'}
         res.redirect('/')
     }
 })
@@ -64,19 +75,26 @@ route.post('/search',auth,async (req,res,next)=>{
             todoList.push(todo)
         }
     }
+    let message = {detail:'Seaching is done',type:'Success'}
     let searched = {title:search,count:todoList.length}
-    res.render('home',{title:'Home Page',url:req.originalUrl,todos:todoList,searched})
+    res.render('home',{title:'Home Page',
+    url:req.originalUrl,
+    todos:todoList,searched,
+    message
+    })
 })
 route.use('/search',auth,async (req,res,next)=>{
     res.render('home',{title:'Home Page',url:req.originalUrl,todos:req.user.product,searched:null})
 })
 route.use('/filter/pending',auth,async (req,res,next)=>{
     let todoFiltered = await req.user.product.filter((todo)=>{return todo.status=='pending'})
-    res.render('home',{title:'Home Page',url:req.originalUrl,todos:todoFiltered})
+    let message = {detail:'Filtered Pending List',type:'Success'}
+    res.render('home',{title:'Home Page',url:req.originalUrl,todos:todoFiltered,message})
 })
 route.use('/filter/completed',auth,async (req,res,next)=>{
     let todoFiltered = await req.user.product.filter((todo)=>{return todo.status=='done'})
-    res.render('home',{title:'Home Page',url:req.originalUrl,todos:todoFiltered})
+    let message = {detail:'Filtered Completed List',type:'Success'}
+    res.render('home',{title:'Home Page',url:req.originalUrl,todos:todoFiltered,message})
 })
 route.use('/filter/all',auth,async (req,res,next)=>{
     res.render('home',{title:'Home Page',url:req.originalUrl,todos:req.user.product})

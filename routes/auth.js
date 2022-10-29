@@ -16,16 +16,31 @@ const express_1 = require("express");
 const users_1 = __importDefault(require("../models/users"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const auth_1 = __importDefault(require("../middleware/auth"));
+const check_1 = require("express-validator/check");
 const route = (0, express_1.Router)();
-route.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+route.post('/login', [
+    (0, check_1.body)('email').not().isEmpty().withMessage('Requires Email').isEmail().withMessage('Invalid Email'),
+    (0, check_1.body)('password').not().isEmpty().withMessage('Requires Password'),
+], (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = (0, check_1.validationResult)(req);
+    // console.log(errors.array())
+    if (!errors.isEmpty()) {
+        let message = { detail: errors.array()[0].msg, type: 'Failed' };
+        return res.render('login', {
+            url: req.originalUrl,
+            title: 'Login Page',
+            message
+        });
+    }
+    // console.log(req.body);
     const { email, password } = req.body;
     const user = yield users_1.default.findOne({ email });
     if (!user) {
+        let message = { detail: 'User Does not Exists', type: 'Failed' };
         return res.render('login', {
             title: 'Login Page',
             url: req.originalUrl,
-            message: 'User Does not Exists'
+            message
         });
     }
     if (user) {
@@ -36,46 +51,65 @@ route.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             return res.redirect('/');
         }
         else {
+            let message = { detail: 'Incorrect Password', type: 'Failed' };
             return res.render('login', {
                 title: 'Login Page',
                 url: req.originalUrl,
-                message: 'Incorrect Password'
+                message
             });
         }
     }
 }));
-route.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+route.post('/signup', [
+    (0, check_1.body)('name').not().isEmpty().withMessage('Requires Name').isLength({ min: 4 }).withMessage('Check For the size of name'),
+    (0, check_1.body)('email').not().isEmpty().withMessage('Requires Email'),
+    (0, check_1.body)('password').not().isEmpty().withMessage('Requires Password').isLength({ min: 5 }).withMessage('Weak Password Less Size')
+], (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = (0, check_1.validationResult)(req);
+    // console.log(errors.array())
+    if (!errors.isEmpty()) {
+        let message = { detail: errors.array()[0].msg, type: 'Failed' };
+        return res.render('signup', {
+            url: req.originalUrl,
+            title: 'SignUp Page',
+            message,
+            values: req.body
+        });
+    }
+    // console.log(req.body);
     const { name, email, password } = req.body;
     const user = yield users_1.default.findOne({ email: email });
     if (user) {
+        let message = { detail: 'User Already Exist', type: 'Failed' };
         return res.render('signup', {
             title: 'SignUp Page',
             url: req.originalUrl,
-            message: 'User Already Exist'
+            message
         });
     }
     else if (!user) {
         const hash = yield bcrypt_1.default.hash(password, 12);
         if (hash) {
-            console.log(hash);
+            // console.log(hash);
             const user = new users_1.default({
                 name,
                 email,
                 password: hash,
+                product: []
             });
             const userStatus = yield user.save();
             if (userStatus) {
-                res.render('login', { title: 'Home Page', url: req.originalUrl, message: 'Signed Up Successfully' });
+                let message = { detail: 'Signed Up Successfully', type: 'Success' };
+                res.render('login', { title: 'Home Page', url: req.originalUrl, message });
             }
         }
     }
 }));
 route.get('/login', (req, res, next) => {
-    res.render('login', { title: 'Home Page', url: req.originalUrl, message: '' });
+    res.render('login', { title: 'Home Page', url: req.originalUrl });
 });
 route.get('/signup', (req, res, next) => {
-    res.render('signup', { title: 'SignUp Page', url: req.originalUrl, message: null });
+    res.render('signup', { title: 'SignUp Page', url: req.originalUrl });
 });
 route.use('/logout', auth_1.default, (req, res, next) => {
     req.session.destroy(() => {

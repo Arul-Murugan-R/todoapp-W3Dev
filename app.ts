@@ -60,6 +60,7 @@ app.use(express.static(path.join(__dirname,'public')))
 
 app.use(async (req:express.Request,res,next)=>{
     res.locals.login = req.session.isLoggedIn
+    res.locals.message = ''
     if(!req.session.user){
         return next()
     }
