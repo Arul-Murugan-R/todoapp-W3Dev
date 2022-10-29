@@ -6,11 +6,12 @@
     <div class="auth">
         
         <form class="form" action="/login" method="post">
-            <% if(message){ %> 
-                <center><div class="alert" role="alert">
-                <%= message %>
-              </div></center>
-              <% } %> 
+            <% if(message){ %>
+                <div class="alert <%= message.type %> ">
+                    <strong><%= message.type  %>!</strong> <%= message.detail %> 
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                </div>
+            <% } %>  
             <div class="input-field">
                 <label><b>Email Id </b></label><span><red>*</red></span><br>
                 <input type="text" name="email" />
