@@ -14,6 +14,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    flex-wrap: wrap;
 
 }
 .switches {
@@ -45,8 +46,8 @@ body {
     background-color: #eee;
     border-radius: 6px;
     padding: 20px;
-    display: flex;
     align-items: center;
+    display: flex;
 }
 .input {
     padding: 10px;
@@ -72,18 +73,21 @@ body {
     margin-top: 20px;
     border-radius: 6px;
     padding: 20px;
+    max-height: 270px;
+    overflow: auto;
 }
 .tasks .task {
     background-color: white;
     padding: 10px;
     border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-between; */
     align-items: center;
     transition: 0.3s;
-    cursor: pointer;
+    /* cursor: pointer; */
     border: 1px solid #ccc;
 }
+
 .tasks .task:not(:last-child) {
     margin-bottom: 15px;
 }
@@ -101,7 +105,11 @@ body {
     position: absolute;
     content: "";
 } */
-.tasks .task span { 
+.tasks .task .line-one{
+    display: flex;
+    justify-content:space-between;
+}
+.tasks .task .line-one span { 
     font-weight: bold;
     font-size: 10px;
     background-color: red;
@@ -111,21 +119,27 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
-.task a.list-title{
+.task .line-one a.list-title{
     text-decoration: none;
     color:black;
+    margin-left: 20px;
 }
 .tasks .task.done-task{
     cursor:text;
     opacity: 0.7;
+    background-color: #51DF70;
 }
+/* .tasks .task.done-task .line-one{
+    text-decoration:line-through;
+    color:#00891E !important;
+} */
 span a.far{
     font-size: 1rem ;
     padding: 5px !important;
     text-decoration: none;
     color:var(--white)
 }
-.task span.done{
+.task .line-one span.done{
     font-size: 1rem;
     padding: 5px 10px;
     text-decoration: none;
@@ -133,7 +147,7 @@ span a.far{
     background-color: var(--fo);
 }
 .delete-all {
-    /* width: calc(100% - 25px); */
+    width: calc(100% - 25px);
     margin: auto;
     padding: 12px;
     text-align: center;
@@ -158,4 +172,8 @@ span a.far{
 }
 .filters a.active{
     color:#f12711;
+}
+.line-two{
+    display: flex;
+    justify-content: space-between;
 }

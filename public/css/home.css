@@ -93,3 +93,55 @@ body{
     margin :10px auto;
     width: 200px auto;
 }
+.alert.Failed{
+    background-color: hsla(4, 100%, 64%, 0.836); /* Red */
+    color: var(--white);
+}
+.alert.Success{
+    background-color: #2fca2cc3; /* Red */
+    color: var(--bg);
+}
+.closebtn {
+    margin-left: 15px;
+    color: var(--bg);
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .closebtn:hover {
+  color: var(--fo);
+}
+
+@media screen and (max-width:700px){
+    .nav-bar h2{
+        letter-spacing: normal;
+        padding-left: 2px;
+        font-size: 18px;
+    }
+    .auth .form{
+        width:350px;
+        font-size: 18px;
+    }
+    .form .input-field input:not([type='submit']){
+        width:300px !important;
+    }
+    .nav-bar .buttons a{
+        padding:2px 1px;
+        font-size: 16px;
+    }
+}
+@media screen and (max-width:380px){
+    .auth .form{
+        width:250px;
+        font-size: 14px;
+    }
+    .form .input-field input:not([type='submit']){
+        width:230px !important;
+    }
+    .alert{
+        font-size: 14px;
+    }
+}
